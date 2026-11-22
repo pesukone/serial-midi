@@ -24,7 +24,7 @@
           nativeBuildInputs = with pkgs; [
             rustup
             rustPlatform.bindgenHook
-            ghidra-bin
+            jdk25
           ];
           buildInputs = [ ];
 
