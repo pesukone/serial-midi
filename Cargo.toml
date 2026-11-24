@@ -2,5 +2,8 @@
 name = "serial-midi"
 version = "0.1.0"
 edition = "2024"
+description = "Expose a Korg NS5R on a serial port as an ALSA MIDI device"
+license = "MIT"
 
 [dependencies]
+libc = "0.2"

@@ -9,8 +9,16 @@ Rust re-implementation of the Korg NS5R rs232 MIDI protocol (and later potential
 
 ## Project state
 
-- Codebase is at the initial stage: `src/main.rs` is a stub and `Cargo.toml` has no dependencies yet. Rust edition 2024.
+- Rust userspace bridge (`src/main.rs` + `src/korg.rs` + `src/alsaseq.rs` +
+  `src/serial.rs`): exposes the NS5R on a serial port as an ALSA sequencer
+  client (ttymidi-style; one read port, one or four write ports), speaking the
+  driver's `F5 <dev>` + `FF`-chunk framing for host→device and plain-MIDI
+  parsing for device→host, at hardcoded 38400 8N1. `cargo test` covers the
+  framing, the RX parser and the ALSA event ABI; `--independent` mirrors the
+  driver's 4-port mode. The driver's message-filter bits are not implemented
+  yet (policy, not protocol).
 - RE findings for the NT driver are written up in `docs/korg-pc-if-driver.md` (driver internals, dispatch tables, function map) and `docs/serial-protocol.md` (wire protocol: 38400 8N1, `F5 <dev>` device select, `FF`+≤4-byte chunk framing on host→device for the "Default MIDI"/"MIDI Out" ports, raw for Synth-A/B, plain MIDI device→host).
+- RE findings for the **Roland RDSMIDNT** driver set are written up in `docs/roland-rdsmidnt-driver.md` (three-component architecture: MME DLL + kernel SYS + user-mode serial-engine EXE, IOCTL map, registry) and `docs/roland-serial-protocol.md` (wire protocol: 38400 8N1, raw MIDI both ways with `F5 <dev>` port select and a device→host `0xF4` suppression filter; per-model port maps for SC-88/Pro, SC-8850, SC-8820, SK-500).
 
 ## Reverse engineering workflow
 

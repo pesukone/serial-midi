@@ -26,7 +26,9 @@
             rustPlatform.bindgenHook
             jdk25
           ];
-          buildInputs = [ ];
+          buildInputs = with pkgs; [
+            alsa-lib
+          ];
 
           RUSTC_VERSION = overrides.toolchain.channel;
 
